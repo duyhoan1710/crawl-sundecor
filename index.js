@@ -124,22 +124,28 @@ const url = 'https://sundecor.vn';
         const productHTML = cheerio.load(product.data);
         productHTML.html();
 
-        const cloneProject = {};
+        let cloneProject = {};
+        
+        try {
+          cloneProject.title = productHTML('title').text();
+          cloneProject.description = productHTML('meta[name="description"]')[0].attribs.content,
+          cloneProject.content = productHTML('#dp1').html();
+          cloneProject.image_1 = `${url}${productHTML('.pb .ll .t')[0].attribs.href}`;
+          cloneProject.name = productHTML('.pb .rr h1').text();
+          cloneProject.code = productHTML('.pb .rr .cc li')[0].children[0].data;
+          cloneProject.size = productHTML('.pb .rr .cc li')[1].children[0].data.replace('Kích thước: ', '');
+          cloneProject.guarantee = productHTML('.pb .rr .cc li')[2].children[0].data.replace('Bảo hành: ', '');
+          cloneProject.status = productHTML('.pb .rr .cc li')[3].children[0].data.replace('Tình trạng: ', '');
+          cloneProject.sell_price = productHTML('.pb .rr .gg .r .t span')[0].children[0].data.replace(',', '').replace(' đ', '');
+          cloneProject.sale_price = productHTML('.pb .rr .gg .l')[0].children[0].data.replace(',', '').replace(' đ', '');
+          cloneProject.subcategory_id = item.subcategory_id;
+        } catch (e) {
+          cloneProject = {};
+        }
 
-        cloneProject.title = productHTML('title').text();
-        cloneProject.description = productHTML('meta[name="description"]')[0].attribs.content,
-        cloneProject.content = productHTML('#dp1').html();
-        cloneProject.image_1 = `${url}${productHTML('.pb .ll .t')[0].attribs.href}`;
-        cloneProject.name = productHTML('.pb .rr h1').text();
-        cloneProject.code = productHTML('.pb .rr .cc li')[0].children[0].data.replace('Mã SP: ','');
-        cloneProject.size = productHTML('.pb .rr .cc li')[1].children[0].data.replace('Kích thước: ', '');
-        cloneProject.guarantee = productHTML('.pb .rr .cc li')[2].children[0].data.replace('Bảo hành: ', '');
-        cloneProject.status = productHTML('.pb .rr .cc li')[3].children[0].data.replace('Tình trạng: ', '');
-        cloneProject.sell_price = productHTML('.pb .rr .gg .r .t span')[0].children[0].data.replace(',', '').replace(' đ', '');
-        cloneProject.sale_price = productHTML('.pb .rr .gg .l')[0].children[0].data.replace(',', '').replace(' đ', '');
-        cloneProject.subcategory_id = item.subcategory_id;
-
-        console.log(cloneProject);
+        if (Object.keys(cloneProject).length) {
+          // save product to database
+        }
       }
     });
   });
