@@ -126,7 +126,7 @@ const url = "https://sundecor.vn";
 
         cloneNews.title = newsHTML('title').text();
         cloneNews.description = newsHTML('meta[name="description"]')[0].attribs.content,
-        cloneNews.image = newsHTML('meta[property="og:url"]')[0].attribs.content
+        cloneNews.image = newsHTML('meta[property="og:image"]')[0].attribs.content
         cloneNews.content = newsHTML('.itr:first').html();
         cloneNews.name = newsHTML('.dr h1').text();
 
